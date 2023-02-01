@@ -10,3 +10,6 @@ clap = { version = "4.1.4", features = ["derive"] }
 clippy = "0.0.302"
 mlua = { version = "0.8.6", features = ["luau","serialize"] }
 serde = { version = "1.0.147", features = ["derive"] }
+
+[build-dependencies]
+mlua = { version = "0.8.6", features = ["luau"] } #so we can pre-compile lua code

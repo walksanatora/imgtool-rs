@@ -7,6 +7,13 @@ use mlua::prelude::*;
 use clap::{Parser,command};
 use std::fs::metadata;
 
+
+macro_rules! out_bytes {
+    ($file:expr) => {
+        include_bytes!(concat!(env!("OUT_DIR"),"/",$file)).as_slice()
+    };
+}
+
 #[derive(Parser, Debug, Serialize, Deserialize, Clone)]
 #[command(author = "walksanator", version = "1.0.0", about = "ComputerCraft VFS tool", long_about = None)]
 struct Args {
@@ -130,15 +137,15 @@ fn main() {
         ).expect("Unnable to create UserData args!")
     ).expect("Failed to add ARGS to _G");
 
-    lenv.load(include_str!("lua/util.lua")).exec().expect("util.lua failed to execute");    
+    lenv.load(out_bytes!("util.lua")).exec().expect("util.lua failed to execute");    
     lenv.sandbox(true).expect("Failed to sandbox _G lua functions");
     println!("ENV setup");
     if !args.extract {
-        if let Err(ohno) = lenv.load(include_str!("lua/ser.lua")).exec() {
+        if let Err(ohno) = lenv.load(out_bytes!("ser.lua")).exec() {
             println!("{:?}",ohno)
         }
     } else {
-        if let Err(ohno) = lenv.load(include_str!("lua/de.lua")).exec() {
+        if let Err(ohno) = lenv.load(out_bytes!("de.lua")).exec() {
             println!("{:?}",ohno)
         }
     }
