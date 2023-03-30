@@ -12,8 +12,15 @@ function unpack_vfs(path,files)
         end
     end
 end
+local contents = fs:read(ARGS.archive)
+contents = contents:match("%[===%[(.+)%]===%]") or contents --extract data from sea block if it exist, if not assume it is a normal file
+if ARGS.compressed then
+    print("decompressed")
+    contents = fs:ungz(contents)
+end
 
 unpack_vfs(
     ARGS.directory,
-    loadstring("return "..fs:read(ARGS.archive))())
+    loadstring("return "..contents)()
+)
 print("done")

@@ -9,11 +9,11 @@ fn main() {
         .set_optimization_level(2);
     for path in std::fs::read_dir("src/lua").unwrap() {
         let de = path.unwrap();
-        std::fs::write(
+        drop(std::fs::write(
             format!("{}/{}",out_dir,de.file_name().to_string_lossy()),
         compiler.compile(
                 std::fs::read_to_string(de.path().display().to_string()).unwrap()
                 )
-        );
+        ));
     }
 }
